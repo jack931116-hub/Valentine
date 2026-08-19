@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
+
+<title>For You</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#030308;
+    color:#fff;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Noto Sans TC",
+        "Noto Sans JP",
+        sans-serif;
+}
+
+/* =========================
+   星空
+========================= */
+
+#stars{
+    position:fixed;
+    inset:0;
+    z-index:0;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    border-radius:50%;
+    background:white;
+    opacity:.5;
+    animation:twinkle 3s infinite;
+}
+
+@keyframes twinkle{
+    0%,100%{opacity:.15}
+    50%{opacity:1}
+}
+
+/* =========================
+   頁面
+========================= */
+
+.page{
+    position:fixed;
+    inset:0;
+    z-index:2;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:30px;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:
+        opacity 1.2s ease,
+        transform 1.2s ease;
+
+    transform:translateY(15px);
+}
+
+.page.active{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0);
+}
+
+.content{
+    width:100%;
+    max-width:430px;
+    text-align:center;
+}
+
+/* =========================
+   基本文字
+========================= */
+
+.small{
+    font-size:14px;
+    color:#888;
+    letter-spacing:1px;
+    line-height:2;
+}
+
+.title{
+    margin-top:20px;
+    font-size:
+        clamp(38px,11vw,70px);
+    font-weight:700;
+    line-height:1.2;
+}
+
+.subtitle{
+    margin-top:22px;
+    color:#aaa;
+    line-height:2;
+    font-size:15px;
+}
+
+.pink{
+    color:#ff7ca8;
+}
+
+/* =========================
+   點擊提示
+========================= */
+
+.tap{
+    margin-top:50px;
+    font-size:12px;
+    color:#666;
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    50%{opacity:.25}
+}
+
+/* =========================
+   Loading
+========================= */
+
+.terminal{
+    font-family:monospace;
+    color:#aaa;
+    text-align:left;
+    line-height:2;
+    font-size:14px;
+}
+
+.progress{
+    width:100%;
+    height:3px;
+    margin-top:25px;
+    background:#1c1c22;
+    border-radius:10px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#fff;
+    transition:.2s;
+}
+
+/* =========================
+   心跳
+========================= */
+
+.heart{
+    font-size:80px;
+    margin:20px 0;
+    animation:heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.12)}
+}
+
+/* =========================
+   卡片
+========================= */
+
+.card{
+    padding:35px 25px;
+
+    border-radius:22px;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.1);
+
+    backdrop-filter:blur(20px);
+
+    box-shadow:
+        0 20px 80px rgba(0,0,0,.5);
+}
+
+.card-title{
+    font-size:21px;
+    line-height:1.7;
+}
+
+.card-text{
+    margin-top:25px;
+    color:#ccc;
+    line-height:2.1;
+    font-size:15px;
+}
+
+/* =========================
+   按鈕
+========================= */
+
+button{
+    margin-top:35px;
+
+    padding:14px 35px;
+
+    border-radius:50px;
+
+    border:
+        1px solid rgba(255,255,255,.25);
+
+    background:
+        rgba(255,255,255,.07);
+
+    color:#fff;
+
+    font-size:15px;
+
+    backdrop-filter:blur(10px);
+
+    transition:.3s;
+}
+
+button:active{
+    transform:scale(.93);
+}
+
+/* =========================
+   地圖距離
+========================= */
+
+.route{
+    position:relative;
+
+    width:300px;
+    height:110px;
+
+    margin:30px auto;
+}
+
+.route-line{
+    position:absolute;
+
+    top:55px;
+    left:25px;
+    right:25px;
+
+    height:1px;
+
+    background:
+        rgba(255,255,255,.3);
+}
+
+.place{
+    position:absolute;
+    top:35px;
+    font-size:13px;
+}
+
+.left{
+    left:0;
+}
+
+.right{
+    right:0;
+}
+
+.plane{
+    position:absolute;
+    top:44px;
+    left:25px;
+
+    animation:fly 3s infinite;
+}
+
+@keyframes fly{
+
+    0%{
+        left:25px;
+    }
+
+    50%{
+        left:135px;
+    }
+
+    100%{
+        left:260px;
+    }
+
+}
+
+/* =========================
+   記憶照片
+========================= */
+
+.memory-photo{
+    width:240px;
+    height:300px;
+
+    margin:25px auto;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    background:#111;
+
+    border:
+        1px solid rgba(255,255,255,.15);
+}
+
+.memory-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* =========================
+   信
+========================= */
+
+.letter{
+    text-align:left;
+
+    max-height:70vh;
+
+    overflow:auto;
+
+    padding:30px 25px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid rgba(255,255,255,.1);
+}
+
+.letter-title{
+    text-align:center;
+    font-size:21px;
+    margin-bottom:25px;
+}
+
+.letter-body{
+    color:#ddd;
+    font-size:15px;
+    line-height:2.2;
+}
+
+/* =========================
+   最後
+========================= */
+
+.final{
+    font-size:
+        clamp(35px,10vw,65px);
+
+    line-height:1.4;
+}
+
+.japanese{
+    margin-top:25px;
+    color:#ddd;
+    line-height:2;
+    font-size:18px;
+}
+
+/* =========================
+   愛心
+========================= */
+
+.floating-heart{
+    position:fixed;
+
+    bottom:-30px;
+
+    z-index:20;
+
+    pointer-events:none;
+
+    animation:
+        floatUp 5s linear forwards;
+}
+
+@keyframes floatUp{
+
+    0%{
+        transform:
+            translateY(0)
+            scale(.7);
+
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            translateY(-110vh)
+            scale(1.5);
+
+        opacity:0;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div id="stars"></div>
+
+
+<!-- ==================================================
+     01
+     神秘啟動
+================================================== -->
+
+<section class="page active" id="p1">
+
+<div class="content">
+
+    <div class="terminal" id="terminal">
+
+        > Initializing...<br>
+        > Loading memories...<br>
+        > Searching database...<br>
+        > Searching...
+
+    </div>
+
+    <div class="progress">
+        <div
+            class="progress-bar"
+            id="bar">
+        </div>
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     02
+     找到她
+================================================== -->
+
+<section class="page" id="p2">
+
+<div class="content">
+
+    <div class="small">
+        SEARCH COMPLETE
+    </div>
+
+    <div class="title">
+        Found.
+    </div>
+
+    <div class="heart">
+        ❤️
+    </div>
+
+    <div class="subtitle">
+
+        I was looking for someone.<br>
+        And somehow...
+
+        <br><br>
+
+        <span class="pink">
+            I found you.
+        </span>
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="next()">
+
+        tap anywhere
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     03
+     第一個問題
+================================================== -->
+
+<section class="page" id="p3">
+
+<div class="content">
+
+    <div class="small">
+        QUESTION 01
+    </div>
+
+    <div class="title">
+        Why you?
+    </div>
+
+    <div class="subtitle">
+
+        其實我也不知道答案。
+
+        <br><br>
+
+        如果真的要問我，
+        <br>
+        「為什麼偏偏是妳？」
+
+        <br><br>
+
+        我大概只能說：
+
+        <br><br>
+
+        <span class="pink">
+            因為遇見妳的那一刻，
+            就已經沒有其他答案了。
+        </span>
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="next()">
+
+        tap to continue
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     04
+     故事開始
+================================================== -->
+
+<section class="page" id="p4">
+
+<div class="content">
+
+    <div class="card">
+
+        <div class="card-title">
+
+            在我們故事開始之前，
+
+            <br>
+
+            我根本不知道
+            <br>
+            會遇見一個像妳這樣的人。
+
+        </div>
+
+        <div class="card-text">
+
+            那時候的我，
+            只是過著自己的生活。
+
+            <br><br>
+
+            然後妳出現了。
+
+            <br><br>
+
+            一開始，
+            我可能也沒有想到，
+
+            <br>
+
+            妳最後會變成
+            <br>
+            對我這麼重要的人。
+
+        </div>
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="next()">
+
+        there is more...
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     05
+     回憶
+================================================== -->
+
+<section class="page" id="p5">
+
+<div class="content">
+
+    <div class="small">
+        MEMORY
+    </div>
+
+    <div class="title">
+        Do you remember?
+    </div>
+
+    <div class="memory-photo">
+
+        <!--
+        把這裡換成你們的照片
+
+        例如：
+        <img src="memory1.jpg">
+        -->
+
+        <img
+        src="memory.jpg"
+	srcset="memory.jpg 1x, memory-highres.jpg 2x"
+	 alt="我最愛的照片">
+
+    </div>
+
+    <div class="subtitle">
+
+        有些事情可能已經過去了。
+
+        <br>
+
+        但對我來說，
+        <br>
+        它們並沒有真的消失。
+
+        <br><br>
+
+        因為它們已經變成了
+        <br>
+
+        <span class="pink">
+            「我們」的一部分。
+        </span>
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="next()">
+
+        keep going
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     06
+     距離
+================================================== -->
+
+<section class="page" id="p6">
+
+<div class="content">
+
+    <div class="small">
+        PRESENT
+    </div>
+
+    <div class="title">
+        And then...
+    </div>
+
+    <div class="route">
+
+        <div class="route-line"></div>
+
+        <div class="place left">
+            🇹🇼 Taiwan
+        </div>
+
+        <div class="place right">
+            🇯🇵 Japan
+        </div>
+
+        <div class="plane">
+            ✈️
+        </div>
+
+    </div>
+
+    <div class="subtitle">
+
+        我們現在隔著一段距離。
+
+        <br><br>
+
+        有時候，
+        <br>
+        我真的很討厭這個距離。
+
+        <br><br>
+
+        因為我想見妳的時候，
+        <br>
+        不能只是走幾步路就到。
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="next()">
+
+        ...
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     07
+     真心話
+================================================== -->
+
+<section class="page" id="p7">
+
+<div class="content">
+
+    <div class="card">
+
+        <div class="card-title">
+            但我想告訴妳一件事。
+        </div>
+
+        <div class="card-text">
+
+            距離讓我更清楚知道，
+
+            <br><br>
+
+            我到底有多想妳。
+
+            <br><br>
+
+            它沒有讓我忘記妳。
+
+            <br>
+
+            反而讓我更加珍惜
+            <br>
+            每一次和妳聊天、
+            每一次見面、
+            每一個小小的回憶。
+
+        </div>
+
+    </div>
+
+    <button onclick="next()">
+        我想繼續看
+    </button>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     08
+     真正的信
+================================================== -->
+
+<section class="page" id="p8">
+
+<div class="content">
+
+    <div class="letter">
+
+        <div class="letter-title">
+            💌 To you
+        </div>
+
+        <div
+            class="letter-body"
+            id="letter">
+        </div>
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="next()">
+
+        ...
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     09
+     以為結束
+================================================== -->
+
+<section class="page" id="p9">
+
+<div class="content">
+
+    <div class="small">
+        END OF MESSAGE
+    </div>
+
+    <div class="title">
+        That's all.
+    </div>
+
+    <div class="subtitle">
+
+        謝謝妳看到這裡。
+
+        <br><br>
+
+        希望妳今天有稍微開心一點。
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="next()">
+
+        close
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     10
+     最後彩蛋
+================================================== -->
+
+<section class="page" id="p10">
+
+<div class="content">
+
+    <div class="small">
+        WAIT...
+    </div>
+
+    <div class="title">
+        One more thing.
+    </div>
+
+    <div class="subtitle">
+
+        剛才那個不是最後一頁。
+
+        <br><br>
+
+        因為有一句話，
+
+        <br>
+
+        我還沒有說。
+
+    </div>
+
+    <button onclick="next()">
+        打開
+    </button>
+
+</div>
+
+</section>
+
+
+<!-- ==================================================
+     11
+     最終告白
+================================================== -->
+
+<section class="page" id="p11">
+
+<div class="content">
+
+    <div class="heart">
+        ❤️
+    </div>
+
+    <div class="final">
+
+        I still<br>
+        choose you.
+
+    </div>
+
+    <div class="japanese">
+
+        どんなに遠く離れていても、<br>
+
+        これからも君を大切にしたい。
+
+        <br><br>
+
+        ずっと大好きだよ。
+
+    </div>
+
+    <div class="subtitle">
+
+        不管我們現在相隔多遠，
+
+        <br>
+
+        我還是會期待下一次見到妳。
+
+    </div>
+
+    <div
+        class="tap"
+        onclick="finalSurprise()">
+
+        ❤️
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<script>
+
+/* ==================================================
+   星空
+================================================== */
+
+const stars =
+document.getElementById("stars");
+
+for(let i=0;i<120;i++){
+
+    const star =
+    document.createElement("div");
+
+    star.className="star";
+
+    star.style.left =
+        Math.random()*100+"%";
+
+    star.style.top =
+        Math.random()*100+"%";
+
+    star.style.animationDelay =
+        Math.random()*3+"s";
+
+    stars.appendChild(star);
+
+}
+
+
+/* ==================================================
+   頁面控制
+================================================== */
+
+let current = 1;
+
+function next(){
+
+    const oldPage =
+        document.getElementById(
+            "p"+current
+        );
+
+    oldPage.classList.remove("active");
+
+    current++;
+
+    const newPage =
+        document.getElementById(
+            "p"+current
+        );
+
+    setTimeout(()=>{
+
+        newPage.classList.add("active");
+
+    },150);
+
+    if(current===8){
+
+        setTimeout(
+            typeLetter,
+            800
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   Loading
+================================================== */
+
+let progress=0;
+
+const bar =
+document.getElementById("bar");
+
+const loading =
+setInterval(()=>{
+
+    progress++;
+
+    bar.style.width =
+        progress+"%";
+
+    if(progress>=100){
+
+        clearInterval(loading);
+
+        setTimeout(()=>{
+
+            document
+            .getElementById("p1")
+            .classList.remove("active");
+
+            document
+            .getElementById("p2")
+            .classList.add("active");
+
+        },800);
+
+    }
+
+},35);
+
+
+/* ==================================================
+   情書
+================================================== */
+
+const letterText =
+
+`其實我一直很想跟妳說，
+
+我不知道我們的故事最後會走到哪裡。
+
+我也不知道未來會發生什麼。
+
+但是我知道一件事情。
+
+我很珍惜遇見妳的這段時間。
+
+妳讓我的生活裡，
+多了一個我會期待的人。
+
+讓我開始期待訊息、
+期待見面、
+期待下一次一起做一些很普通的事情。
+
+甚至只是一起走路、
+一起吃飯、
+一起待著，
+
+對我來說都變得很特別。
+
+現在我們隔著很遠的距離，
+
+我偶爾也會覺得很難熬。
+
+但即使如此，
+
+如果讓我重新選一次，
+
+我還是會選擇遇見妳。
+
+所以，
+
+謝謝妳出現在我的生命裡。
+
+そして、
+
+これからも一緒にいようね。❤️`;
+
+
+function typeLetter(){
+
+    const element =
+        document.getElementById(
+            "letter"
+        );
+
+    element.innerHTML="";
+
+    let i=0;
+
+    const timer=setInterval(()=>{
+
+        if(i<letterText.length){
+
+            const char =
+                letterText[i];
+
+            if(char==="\n"){
+
+                element.innerHTML +=
+                    "<br><br>";
+
+            }else{
+
+                element.innerHTML +=
+                    char;
+
+            }
+
+            i++;
+
+        }else{
+
+            clearInterval(timer);
+
+        }
+
+    },35);
+
+}
+
+
+/* ==================================================
+   愛心彩蛋
+================================================== */
+
+function createHeart(){
+
+    const heart =
+        document.createElement("div");
+
+    heart.className =
+        "floating-heart";
+
+    heart.innerHTML =
+        Math.random()>0.5
+        ? "❤️"
+        : "💗";
+
+    heart.style.left =
+        Math.random()*100+"vw";
+
+    heart.style.fontSize =
+        15+Math.random()*30+"px";
+
+    document.body.appendChild(
+        heart
+    );
+
+    setTimeout(()=>{
+
+        heart.remove();
+
+    },5000);
+
+}
+
+
+function finalSurprise(){
+
+    for(let i=0;i<60;i++){
+
+        setTimeout(()=>{
+
+            createHeart();
+
+        },i*80);
+
+    }
+
+    setTimeout(()=>{
+
+        document.body.innerHTML += `
+
+        <div
+        style="
+        position:fixed;
+        inset:0;
+        z-index:100;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:30px;
+        background:#030308;
+        font-size:22px;
+        line-height:2;
+        ">
+
+            <div>
+
+                <div style="font-size:70px">
+                    ❤️
+                </div>
+
+                <br>
+
+                如果妳看到這裡，
+
+                <br>
+
+                那我想說——
+
+                <br><br>
+
+                <span
+                style="
+                color:#ff7ca8;
+                font-size:30px;
+                ">
+
+                ありがとう。
+
+                </span>
+
+                <br><br>
+
+                <span style="font-size:15px;color:#888">
+
+                また会おうね。
+
+                </span>
+
+            </div>
+
+        </div>
+
+        `;
+
+    },4000);
+
+}
+
+</script>
+
+</body>
+</html>
